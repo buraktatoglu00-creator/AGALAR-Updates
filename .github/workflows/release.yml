@@ -43,6 +43,7 @@ jobs:
           VERSION=$(sed -n 's/^const appVersion = "\([0-9.]*\)"/\1/p' config.go)
           test -n "$VERSION"
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          export VERSION
           GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags='-H windowsgui -s -w' -o ../AGALAR.exe .
           cd ..
           python3 - <<'PY'
