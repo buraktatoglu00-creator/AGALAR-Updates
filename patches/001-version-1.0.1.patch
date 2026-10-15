@@ -1,0 +1,8 @@
+--- a/config.go
++++ b/config.go
+@@ -15,7 +15,7 @@
+-const appVersion = "1.0.0"
++const appVersion = "1.0.1"
+ const githubOwner = "buraktatoglu00-creator"
+ const githubRepo = "AGALAR-Updates"
+ const minecraftVersion = "1.20.1"
