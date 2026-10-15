@@ -1,6 +1,6 @@
 --- a/config.go
 +++ b/config.go
-@@ -15,7 +15,7 @@
+@@ -17,4 +17,4 @@
 -const appVersion = "1.0.0"
 +const appVersion = "1.0.1"
  const githubOwner = "buraktatoglu00-creator"
