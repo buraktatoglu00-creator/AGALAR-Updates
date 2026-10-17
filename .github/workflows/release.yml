@@ -36,6 +36,12 @@ jobs:
               test -f "$p" || continue
               (cd src && patch -p1 --batch < "../$p")
             done
+            if [[ "$SOURCE" == "./AGALAR-Kaynak-v1.1.0.zip" ]]; then
+              for p in patches/*.xz.b64; do
+                test -f "$p" || continue
+                base64 -d "$p" | xz -d | (cd src && patch -p1 --batch)
+              done
+            fi
           fi
           test -f src/go.mod
       - name: Test and build Windows EXE
