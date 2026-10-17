@@ -37,8 +37,10 @@ jobs:
               (cd src && patch -p1 --batch < "../$p")
             done
             if [[ "$SOURCE" == "./AGALAR-Kaynak-v1.1.0.zip" ]]; then
-              for p in patches/*.xz.b64; do
-                test -f "$p" || continue
+              # Apply compressed feature patches in semantic-version order.
+              # The baseline v1.1.0 source is deliberately used until a newer
+              # full ZIP is uploaded. Patches are cumulative (1.2.0 -> 1.2.1).
+              for p in $(find patches -maxdepth 1 -name '*.xz.b64' | sort -V); do
                 base64 -d "$p" | xz -d | (cd src && patch -p1 --batch)
               done
             fi
