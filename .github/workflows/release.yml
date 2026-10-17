@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'AGALAR-Kaynak.zip'
+      - 'AGALAR-Kaynak-v*.zip'
       - 'patches/**'
   workflow_dispatch:
 permissions:
@@ -24,9 +25,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -f AGALAR-Kaynak.zip || { echo 'Upload AGALAR-Kaynak.zip first'; exit 1; }
+          SOURCE=$(find . -maxdepth 1 -name 'AGALAR-Kaynak-v*.zip' -print | sort -V | tail -n 1)
+          if test -z "$SOURCE"; then SOURCE='AGALAR-Kaynak.zip'; fi
+          test -f "$SOURCE" || { echo 'Upload an AGALAR source ZIP first'; exit 1; }
+          echo "Building from $SOURCE"
           mkdir -p src
-          unzip -q AGALAR-Kaynak.zip -d src
+          unzip -q "$SOURCE" -d src
           if test -d patches; then
             for p in patches/*.patch; do
               test -f "$p" || continue
