@@ -31,7 +31,14 @@ jobs:
           echo "Building from $SOURCE"
           mkdir -p src
           unzip -q "$SOURCE" -d src
-          if test -d patches; then
+          # Complete source archives since v1.3.0 already contain all changes.
+          # Never apply legacy v1.1-v1.2 patches to a complete new archive.
+          SOURCE_VERSION=$(sed -n 's/^const appVersion = "\\([0-9.]*\\)"/\\1/p' src/config.go)
+          if test -z "$SOURCE_VERSION"; then echo "Missing appVersion"; exit 1; fi
+          FIRST=$(printf '%s\n' "1.3.0" "$SOURCE_VERSION" | sort -V | head -n 1)
+          if [[ "$FIRST" == "1.3.0" ]]; then
+            echo "Complete source $SOURCE_VERSION: skipping legacy patches"
+          elif test -d patches; then
             for p in patches/*.patch; do
               test -f "$p" || continue
               (cd src && patch -p1 --batch < "../$p")
